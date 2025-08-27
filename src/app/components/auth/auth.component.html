@@ -1,0 +1,10 @@
+<form [formGroup]="authForm" (ngSubmit)="submit()">
+  <input *ngIf="!isLoginMode" type="text" formControlName="name" placeholder="Name">
+  <input type="email" formControlName="email" placeholder="Email">
+  <input type="password" formControlName="password" placeholder="Password">
+  <button type="submit">{{ isLoginMode ? 'Login' : 'Register' }}</button>
+</form>
+
+<button (click)="toggleMode()">
+  Switch to {{ isLoginMode ? 'Register' : 'Login' }}
+</button>

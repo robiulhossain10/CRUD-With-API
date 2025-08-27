@@ -1,0 +1,47 @@
+<div class="p-6">
+  <h2 class="text-2xl font-bold mb-6 text-gray-100">Users</h2>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div *ngFor="let user of users"
+      class="bg-gray-800/60 backdrop-blur-lg p-6 rounded-2xl shadow-md hover:shadow-xl transition duration-300">
+      <h3 class="font-semibold text-lg text-blue-400">{{ user.name }}</h3>
+      <p class="text-gray-300">{{ user.email }}</p>
+      <p class="text-gray-400">Role: {{ user.role || 'user' }}</p>
+
+      <div class="mt-4 flex gap-2">
+        <button class="bg-yellow-500 text-white px-3 py-1 rounded-lg hover:bg-yellow-600 transition-colors"
+          (click)="startEdit(user)">
+          Edit
+        </button>
+        <button class="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors"
+          (click)="deleteUser(user._id)">
+          Delete
+        </button>
+      </div>
+
+      <!-- Edit Form -->
+      <div *ngIf="editingUser?._id === user._id" class="mt-4">
+        <form [formGroup]="editForm" (ngSubmit)="saveEdit()" class="space-y-2">
+          <input type="text" formControlName="name" placeholder="Name"
+            class="w-full p-2 rounded-lg border border-gray-600 bg-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          <input type="email" formControlName="email" placeholder="Email"
+            class="w-full p-2 rounded-lg border border-gray-600 bg-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          <input type="text" formControlName="role" placeholder="Role"
+            class="w-full p-2 rounded-lg border border-gray-600 bg-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+
+          <div class="flex gap-2">
+            <button type="submit"
+              class="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600 transition-colors">
+              Save
+            </button>
+            <button type="button"
+              class="bg-gray-500 text-white px-3 py-1 rounded-lg hover:bg-gray-600 transition-colors"
+              (click)="cancelEdit()">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

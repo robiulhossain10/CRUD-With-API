@@ -1,0 +1,4 @@
+/* Tailwind handles most of styling, optional extra spacing */
+body {
+  @apply bg-gray-100;
+}
