@@ -19,7 +19,7 @@ interface User {
 export class DashboardComponent implements OnInit {
   totalUsers = 0;
   users: User[] = [];
-  currentUser: User | null = null; // logged-in user
+  currentUser: User | null = null;
 
   constructor(
     private userService: UserService,
@@ -30,7 +30,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.loadUsers();
 
-    // Get current logged-in user
+    // Get logged-in user
     this.auth.currentUser$.subscribe((user) => {
       this.currentUser = user;
     });
@@ -39,7 +39,23 @@ export class DashboardComponent implements OnInit {
   loadUsers(): void {
     this.userService.getAll().subscribe({
       next: (res: any) => {
-        this.users = Array.isArray(res) ? res : [];
+        // Safety check: ensure res is an array
+        if (!Array.isArray(res)) {
+          console.error('Expected array from API, got:', res);
+          this.users = [];
+          this.totalUsers = 0;
+          return;
+        }
+
+        // Map users with isActive from backend
+        this.users = res.map((user) => ({
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role || 'user',
+          isActive: typeof user.isActive === 'boolean' ? user.isActive : false,
+        }));
+
         this.totalUsers = this.users.length;
       },
       error: (err: any) => {
@@ -60,6 +76,6 @@ export class DashboardComponent implements OnInit {
   }
 
   goToProfile(): void {
-    this.router.navigate(['/profile']); // navigate to profile page
+    this.router.navigate(['/profile']);
   }
 }

@@ -22,6 +22,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { AuthInterceptor } from './interceptors/token.interceptor';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { UserDashboardComponent } from './components/user-home/user-home.component';
 
 // Interceptor
 
@@ -35,6 +36,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     UserCrudComponent,
     AuthComponent,
     DashboardComponent,
+    UserDashboardComponent,
   ],
   imports: [
     BrowserModule,

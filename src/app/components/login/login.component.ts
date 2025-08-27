@@ -24,8 +24,21 @@ export class LoginComponent {
     const data = this.form.getRawValue(); // { email: string, password: string }
 
     this.auth.login(data).subscribe({
-      next: () => this.router.navigate(['/dashboard']),
+      next: (res: any) => {
+        this.auth.saveToken(res.token);
+        this.auth.currentUser$.next(res.user);
+
+        // Role based navigation
+        if (res.user.role === 'admin') {
+          this.router.navigate(['/dashboard']); // Admin Dashboard
+        } else if (res.user.role === 'user') {
+          this.router.navigate(['/userhome']); // User home page
+        } else {
+          this.router.navigate(['/']); // Default
+        }
+      },
       error: (err) => (this.error = err.error?.message || 'Login failed'),
     });
+
   }
 }

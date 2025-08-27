@@ -23,13 +23,16 @@ export class AuthService {
   }
 
   // ---------------- LOGIN ----------------
-  login(data: {
-    email: string;
-    password: string;
-  }): Observable<{ token: string; user: User }> {
-    return this.http
-      .post<{ token: string; user: User }>(`${this.apiUrl}/auth/login`, data)
-      .pipe(tap((res) => this.storeAuth(res)));
+  login(data: { email: string; password: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/login`, data).pipe(
+      tap((res: any) => {
+        if (res?.token && res?.user) {
+          localStorage.setItem('token', res.token);
+          localStorage.setItem('user', JSON.stringify(res.user));
+          this.currentUser$.next(res.user);
+        }
+      })
+    );
   }
 
   // ---------------- REGISTER ----------------
