@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -8,19 +9,33 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  getAll() {
-    return this.http.get(this.base);
+  // ✅ Dashboard এর জন্য ব্যবহার হবে
+  getUsers(): Observable<any[]> {
+    return this.http.get<any[]>(this.base);
   }
 
-  getById(id: string) {
-    return this.http.get(`${this.base}/${id}`);
+  getCurrentUser(): Observable<any> {
+    return this.http.get<any>(`${this.base}/me`); // তোমার backend এ /me endpoint থাকতে হবে
   }
 
-  update(id: string, data: any) {
-    return this.http.put(`${this.base}/${id}`, data);
+  logout(): void {
+    localStorage.removeItem('token');
   }
 
-  delete(id: string) {
-    return this.http.delete(`${this.base}/${id}`);
+  // ✅ CRUD Methods
+  getAll(): Observable<any[]> {
+    return this.http.get<any[]>(this.base);
+  }
+
+  getById(id: string): Observable<any> {
+    return this.http.get<any>(`${this.base}/${id}`);
+  }
+
+  update(id: string, data: any): Observable<any> {
+    return this.http.put<any>(`${this.base}/${id}`, data);
+  }
+
+  delete(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.base}/${id}`);
   }
 }

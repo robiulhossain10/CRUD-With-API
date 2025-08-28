@@ -51,7 +51,9 @@
       <div
         class="bg-gray-800/70 backdrop-blur-md p-6 rounded shadow hover:shadow-lg transition duration-200 flex flex-col items-center">
         <h2 class="text-gray-400 text-sm">Last Registered</h2>
-        <p class="text-3xl font-bold mt-2">{{ users[users.length - 1]?.name || 'N/A' }}</p>
+        <p class="text-3xl font-bold mt-2">
+          {{ users.length > 0 ? users[users.length - 1].name : 'N/A' }}
+        </p>
       </div>
 
       <div

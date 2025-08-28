@@ -1,15 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../services/user.service';
-import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
-
-interface User {
-  _id: string;
-  name: string;
-  email: string;
-  isActive?: boolean;
-  role?: string;
-}
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,65 +7,51 @@ interface User {
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
-  totalUsers = 0;
-  users: User[] = [];
-  currentUser: User | null = null;
+  users: any[] = []; // সবসময় খালি array দিয়ে শুরু
+  totalUsers: number = 0;
+  activeUsers: number = 0;
+  currentUser: any = null;
 
-  constructor(
-    private userService: UserService,
-    private auth: AuthService,
-    private router: Router
-  ) {}
+  constructor(private userService: UserService) {}
 
   ngOnInit(): void {
     this.loadUsers();
-
-    // Get logged-in user
-    this.auth.currentUser$.subscribe((user) => {
-      this.currentUser = user;
-    });
+    this.loadCurrentUser();
   }
 
   loadUsers(): void {
-    this.userService.getAll().subscribe({
-      next: (res: any) => {
-        // Safety check: ensure res is an array
-        if (!Array.isArray(res)) {
-          console.error('Expected array from API, got:', res);
-          this.users = [];
-          this.totalUsers = 0;
-          return;
-        }
-
-        // Map users with isActive from backend
-        this.users = res.map((user) => ({
-          _id: user._id,
-          name: user.name,
-          email: user.email,
-          role: user.role || 'user',
-          isActive: typeof user.isActive === 'boolean' ? user.isActive : false,
-        }));
-
+    this.userService.getUsers().subscribe({
+      next: (res: any[]) => {
+        this.users = res || []; // যদি null/undefined হয়, খালি array assign হবে
         this.totalUsers = this.users.length;
+        this.activeUsers = this.users.filter((u) => u.active).length;
       },
-      error: (err: any) => {
+      error: (err) => {
         console.error('Error loading users:', err);
-        this.users = [];
-        this.totalUsers = 0;
+        this.users = []; // fallback
       },
     });
   }
 
-  get activeUsers(): number {
-    return this.users.filter((u) => u.isActive).length;
-  }
-
-  logout(): void {
-    this.auth.logout();
-    this.router.navigate(['/login']);
+  loadCurrentUser(): void {
+    this.userService.getCurrentUser().subscribe({
+      next: (res) => {
+        this.currentUser = res || null;
+      },
+      error: (err) => {
+        console.error('Error loading current user:', err);
+        this.currentUser = null;
+      },
+    });
   }
 
   goToProfile(): void {
-    this.router.navigate(['/profile']);
+    // এখানে router.navigate(['/profile']); দিতে পারো
+    console.log('Go to profile page');
+  }
+
+  logout(): void {
+    this.userService.logout();
+    console.log('Logged out');
   }
 }
