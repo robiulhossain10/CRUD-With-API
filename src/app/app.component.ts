@@ -8,18 +8,18 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
   title = 'angular-jwt-auth';
-  isLogin = false;
+  // isLogin = false;
 
-  constructor(private router: Router) {}
+  // constructor(private router: Router) {}
 
-  ngOnInit(): void {
-    this.login();
-  }
-  login() {
-    if (this.isLogin) {
-      this.router.navigate(['/dashboard']);
-    } else {
-      this.router.navigate(['/login']);
-    }
-  }
+  // ngOnInit(): void {
+  //   this.login();
+  // }
+  // login() {
+  //   if (this.isLogin) {
+  //     this.router.navigate(['/dashboard']);
+  //   } else {
+  //     this.router.navigate(['/login']);
+  //   }
+  // }
 }
