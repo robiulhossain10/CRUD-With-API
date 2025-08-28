@@ -23,6 +23,7 @@ import { MatCardModule } from '@angular/material/card';
 import { AuthInterceptor } from './interceptors/token.interceptor';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { UserDashboardComponent } from './components/user-home/user-home.component';
+import { ErrorComponent } from './components/error/error.component';
 
 // Interceptor
 
@@ -37,6 +38,7 @@ import { UserDashboardComponent } from './components/user-home/user-home.compone
     AuthComponent,
     DashboardComponent,
     UserDashboardComponent,
+    ErrorComponent,
   ],
   imports: [
     BrowserModule,

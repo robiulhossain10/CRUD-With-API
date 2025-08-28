@@ -8,6 +8,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AdminGuard } from './guards/admin.guard';
 import { UserDashboardComponent } from './components/user-home/user-home.component';
+import { ErrorComponent } from './components/error/error.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -35,7 +36,7 @@ const routes: Routes = [
   { path: 'userhome', component: UserDashboardComponent }, // user role
 
   // Wildcard route for 404
-  { path: '**', redirectTo: '/login' },
+  { path: '**', component: ErrorComponent },
 ];
 
 
