@@ -24,6 +24,8 @@ import { AuthInterceptor } from './interceptors/token.interceptor';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { UserDashboardComponent } from './components/user-home/user-home.component';
 import { ErrorComponent } from './components/error/error.component';
+import { FilterPipe } from './pipe/filter.pipe';
+import { HighlightDirective } from './directives/highlights.directive';
 
 // Interceptor
 
@@ -39,6 +41,8 @@ import { ErrorComponent } from './components/error/error.component';
     DashboardComponent,
     UserDashboardComponent,
     ErrorComponent,
+    FilterPipe,
+    HighlightDirective,
   ],
   imports: [
     BrowserModule,
