@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
+import { AuthService, User } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -9,8 +9,14 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
   form = new FormGroup({
-    email: new FormControl<string>('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
-    password: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
+    email: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.email],
+    }),
+    password: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
   });
 
   error = '';
@@ -20,12 +26,11 @@ export class LoginComponent {
   submit() {
     if (this.form.invalid) return;
 
-    // ✅ এখানে value কে টাইপ হিসেবে cast করা
     const data = this.form.getRawValue(); // { email: string, password: string }
 
     this.auth.login(data).subscribe({
-      next: (res: any) => {
-        this.auth.saveToken(res.token);
+      next: (res: { token: string; refreshToken: string; user: User }) => {
+        // Current user set
         this.auth.currentUser$.next(res.user);
 
         // Role based navigation
@@ -34,11 +39,12 @@ export class LoginComponent {
         } else if (res.user.role === 'user') {
           this.router.navigate(['/userhome']); // User home page
         } else {
-          this.router.navigate(['/']); // Default
+          this.router.navigate(['/']); // Default fallback
         }
       },
-      error: (err) => (this.error = err.error?.message || 'Login failed'),
+      error: (err) => {
+        this.error = err.error?.message || 'Login failed';
+      },
     });
-
   }
 }
